@@ -4,6 +4,7 @@ import com.example.demo.domain.user.User;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "POSTS")
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

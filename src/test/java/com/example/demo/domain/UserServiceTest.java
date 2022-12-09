@@ -1,4 +1,4 @@
-package com.example.demo.post;
+package com.example.demo.domain;
 
 import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.UserDto;

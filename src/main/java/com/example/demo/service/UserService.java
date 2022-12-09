@@ -39,7 +39,10 @@ public class UserService {
     public Long changeConfig(Long id, UserDto new_userDto){
         User user = userRepository.getReferenceById(id);
 
-        user.changeConfig(new_userDto.getName(), new_userDto.getPassword());
+        user.changeConfig(
+                new_userDto.getName(),
+                new_userDto.getPassword()
+        );
 
         return user.getId();
     }

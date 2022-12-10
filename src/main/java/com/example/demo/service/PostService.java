@@ -1,13 +1,12 @@
 package com.example.demo.service;
 
 import com.example.demo.domain.post.Post;
-import com.example.demo.domain.post.PostDto;
+import com.example.demo.api.dto.PostDto;
 import com.example.demo.domain.post.PostRepository;
 import com.example.demo.domain.post.Updater;
 import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +19,7 @@ public class PostService {
 
     @Transactional
     public Long save(Long userId, PostDto postDto){
+
 
         User user = userRepository.getReferenceById(userId);
 

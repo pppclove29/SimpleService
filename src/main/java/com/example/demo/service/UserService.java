@@ -1,12 +1,16 @@
 package com.example.demo.service;
 
+import com.example.demo.api.dto.UserDto;
+import com.example.demo.domain.user.Role;
 import com.example.demo.domain.user.User;
-import com.example.demo.domain.user.UserDto;
 import com.example.demo.domain.user.UserRepository;
 import com.example.demo.except.WrongPasswordException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,13 +26,15 @@ public class UserService {
                 .name(userDto.getName())
                 .password(userDto.getPassword())
                 .build();
+        new_user.setRole(Role.USER);
 
         return userRepository.save(new_user).getId();
     }
 
     @Transactional
     public Long login(UserDto userDto) throws WrongPasswordException {
-            User user = userRepository.findByName(userDto.getName());
+
+        User user = userRepository.findByName(userDto.getName());
         user.checkPassword(userDto.getPassword());
 
         System.out.println("로그인 성공");
@@ -36,7 +42,7 @@ public class UserService {
     }
 
     @Transactional
-    public Long changeConfig(Long id, UserDto new_userDto){
+    public Long changeConfig(Long id, UserDto new_userDto) {
         User user = userRepository.getReferenceById(id);
 
         user.changeConfig(
@@ -49,10 +55,15 @@ public class UserService {
 
 
     @Transactional
-    public Long withdraw(Long id, UserDto userDto){
+    public Long withdraw(Long id, UserDto userDto) {
         userRepository.deleteById(id);
         // 연관된 게시물도 지워지나? 안지워질듯?
 
         return id;
+    }
+
+    @Transactional
+    public List<User> findAllUser() {
+        return userRepository.findAll().stream().collect(Collectors.toList());
     }
 }

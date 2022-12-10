@@ -1,10 +1,10 @@
 package com.example.demo.domain;
 
 import com.example.demo.domain.post.Post;
-import com.example.demo.domain.post.PostDto;
+import com.example.demo.api.dto.PostDto;
 import com.example.demo.domain.post.PostRepository;
 import com.example.demo.domain.user.User;
-import com.example.demo.domain.user.UserDto;
+import com.example.demo.api.dto.UserDto;
 import com.example.demo.domain.user.UserRepository;
 import com.example.demo.service.PostService;
 import com.example.demo.service.UserService;
@@ -126,16 +126,18 @@ public class PostServiceTest {
     }
 
     UserDto createUser() {
-        return UserDto.builder()
-                .name("테스트 이름")
-                .password("테스트 비밀번호")
-                .build();
+        UserDto dto = new UserDto();
+        dto.setName("임시");
+        dto.setPassword("임시");
+
+        return dto;
     }
     PostDto createPost(String title, String content) {
-        return PostDto.builder()
-                .title(title)
-                .content(content)
-                .build();
+        PostDto dto = new PostDto();
+        dto.setTitle(title);
+        dto.setContent(content);
+
+        return dto;
     }
 }
 

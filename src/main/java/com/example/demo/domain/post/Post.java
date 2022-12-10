@@ -2,7 +2,6 @@ package com.example.demo.domain.post;
 
 import com.example.demo.domain.BaseEntity;
 import com.example.demo.domain.post.comment.Comment;
-import com.example.demo.domain.post.comment.CommentDto;
 import com.example.demo.domain.user.User;
 import jakarta.persistence.*;
 import lombok.Builder;

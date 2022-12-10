@@ -1,7 +1,7 @@
 package com.example.demo.domain;
 
 import com.example.demo.domain.user.User;
-import com.example.demo.domain.user.UserDto;
+import com.example.demo.api.dto.UserDto;
 import com.example.demo.domain.user.UserRepository;
 import com.example.demo.except.WrongPasswordException;
 import com.example.demo.service.UserService;
@@ -32,16 +32,16 @@ public class UserServiceTest {
 
     @Test
     public void 회원가입테스트() {
+        //given
         String testName = "테스트 이름";
         String testPassword = "테스트 비밀번호";
 
-        UserDto dto = UserDto.builder()
-                .name(testName)
-                .password(testPassword)
-                .build();
+        UserDto dto = createUser(testName,testPassword);
 
+        //when
         Long id = userService.register(dto);
 
+        //then
         User user = userRepository.getReferenceById(id);
         User user2 = userRepository.findById(id).get();
 
@@ -55,23 +55,20 @@ public class UserServiceTest {
 
     @Test
     public void 로그인테스트() {
+        //given
         String testName = "테스트 이름";
         String testPassword = "테스트 비밀번호";
 
-        UserDto register_dto = UserDto.builder()
-                .name(testName)
-                .password(testPassword)
-                .build();
+        UserDto register_dto = createUser(testName,testPassword);
 
         Long r_id = userService.register(register_dto);
 
-        UserDto login_dto = UserDto.builder()
-                .name(testName)
-                .password(testPassword)
-                .build();
+        UserDto login_dto = createUser(testName,testPassword);
 
+        //when
         Long l_id = userService.login(login_dto);
 
+        //then
         User user = userRepository.getReferenceById(l_id);
 
         assertThat(r_id).isEqualTo(l_id);
@@ -81,49 +78,44 @@ public class UserServiceTest {
 
     @Test
     public void 틀린비밀번호로그인테스트() {
+        //given
         String testName = "테스트 이름";
         String testPassword = "테스트 비밀번호";
 
-        UserDto register_dto = UserDto.builder()
-                .name(testName)
-                .password(testPassword)
-                .build();
+        UserDto dto = createUser(testName,testPassword);
 
-        Long r_id = userService.register(register_dto);
+        Long r_id = userService.register(dto);
 
-        UserDto login_dto = UserDto.builder()
-                .name(testName)
-                .password(testPassword + "Wrong")
-                .build();
+        UserDto login_dto = createUser(testName,testPassword + "wrong");
+
+        //when
         try {
             Long l_id = userService.login(login_dto);
         } catch (WrongPasswordException e) {
+            //then
             System.out.println(e.getMessage());
         }
     }
 
     @Test
     public void 회원정보변경테스트() {
+        //given
         String testName = "테스트 이름";
         String testPassword = "테스트 비밀번호";
 
-        UserDto dto = UserDto.builder()
-                .name(testName)
-                .password(testPassword)
-                .build();
+        UserDto dto = createUser(testName,testPassword);
 
         Long id = userService.register(dto);
 
         String newTestName = "새로운 테스트 이름";
         String newTestPassword = "새로운 테스트 비밀번호";
 
-        UserDto new_dto = UserDto.builder()
-                .name(newTestName)
-                .password(newTestPassword)
-                .build();
+        UserDto new_dto = createUser(newTestName,newTestPassword);
 
+        //when
         Long new_id = userService.changeConfig(id, new_dto);
 
+        //then
         User user = userRepository.getReferenceById(new_id);
 
         assertThat(user.getName()).isEqualTo(newTestName);
@@ -133,18 +125,18 @@ public class UserServiceTest {
 
     @Test
     public void 회원탈퇴테스트() {
+        //given
         String testName = "테스트 이름";
         String testPassword = "테스트 비밀번호";
 
-        UserDto dto = UserDto.builder()
-                .name(testName)
-                .password(testPassword)
-                .build();
+        UserDto dto = createUser(testName,testPassword);
 
         Long id = userService.register(dto);
 
+        //when
         Long deleted_id = userService.withdraw(id,null);
 
+        //then
         try{
             userRepository.findById(deleted_id).orElseThrow(
                     () -> new IllegalArgumentException("그런 사람 없습니다"));
@@ -152,5 +144,12 @@ public class UserServiceTest {
         catch (IllegalArgumentException e){
             System.out.println(e.getMessage());
         }
+    }
+    UserDto createUser(String name, String password) {
+        UserDto dto = new UserDto();
+        dto.setName(name);
+        dto.setPassword(password);
+
+        return dto;
     }
 }

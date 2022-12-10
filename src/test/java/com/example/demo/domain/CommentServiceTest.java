@@ -1,13 +1,13 @@
 package com.example.demo.domain;
 
 import com.example.demo.domain.post.Post;
-import com.example.demo.domain.post.PostDto;
+import com.example.demo.api.dto.PostDto;
 import com.example.demo.domain.post.PostRepository;
 import com.example.demo.domain.post.comment.Comment;
-import com.example.demo.domain.post.comment.CommentDto;
+import com.example.demo.api.dto.CommentDto;
 import com.example.demo.domain.post.comment.CommentRepository;
 import com.example.demo.domain.user.User;
-import com.example.demo.domain.user.UserDto;
+import com.example.demo.api.dto.UserDto;
 import com.example.demo.domain.user.UserRepository;
 import com.example.demo.service.CommentService;
 import com.example.demo.service.PostService;
@@ -21,7 +21,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
@@ -132,20 +131,23 @@ public class CommentServiceTest {
     }
 
     UserDto createUser() {
-        return UserDto.builder()
-                .name("테스트 이름")
-                .password("테스트 비밀번호")
-                .build();
+        UserDto dto = new UserDto();
+        dto.setName("임시");
+        dto.setPassword("임시");
+
+        return dto;
     }
     PostDto createPost() {
-        return PostDto.builder()
-                .title("title")
-                .content("content")
-                .build();
+        PostDto dto = new PostDto();
+        dto.setTitle("임시");
+        dto.setContent("임시");
+
+        return dto;
     }
     CommentDto createComment(String content) {
-        return CommentDto.builder()
-                .content(content)
-                .build();
+        CommentDto dto =new CommentDto();
+        dto.setContent(content);
+
+        return dto;
     }
 }

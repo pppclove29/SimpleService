@@ -3,13 +3,11 @@ package com.example.demo.domain.user;
 import com.example.demo.domain.BaseEntity;
 import com.example.demo.domain.post.Post;
 import com.example.demo.domain.post.comment.Comment;
-import com.example.demo.domain.post.comment.CommentDto;
 import com.example.demo.except.WrongPasswordException;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +36,11 @@ public class User extends BaseEntity {
     Role role;
 
     @Builder
-    User(String name, String password, Role role) {
+    User(String name, String password) {
         this.name = name;
         this.password = password;
+    }
+    public void setRole(Role role){
         this.role = role;
     }
 

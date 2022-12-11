@@ -6,22 +6,18 @@ import com.example.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/user")
 public class UserServiceApi {
 
     private final UserService userService;
 
-    @GetMapping
-    public String apiTest(){
-        return "get 요청";
-    }
-
     @PostMapping
-    public List<User> register(@RequestBody UserDto userDto) {
+    public List<UserDto> register(@RequestBody UserDto userDto) {
 
         userService.register(userDto);
 
@@ -29,22 +25,27 @@ public class UserServiceApi {
     }
 
     @PostMapping("/login")
-    public List<User> login(@RequestBody UserDto userDto) {
+    public List<UserDto> login(@RequestBody UserDto userDto) {
 
         userService.login(userDto);
 
         return userService.findAllUser();
     }
 
-    @PutMapping("/{id}")
-    public Long changeConfig(@PathVariable Long id,
-                             @RequestBody UserDto userDto) {
-        return userService.changeConfig(id, userDto);
+    @PostMapping("/{id}")
+    public List<UserDto> changeConfig(@RequestBody UserDto userDto,
+                                      @PathVariable Long id) {
+
+        userService.changeConfig(id, userDto);
+
+        return userService.findAllUser();
     }
 
     @DeleteMapping("/{id}")
-    public Long withdraw(@PathVariable Long id,
-                         @RequestBody UserDto userDto) {
-        return userService.withdraw(id, userDto);
+    public List<UserDto> withdraw(@PathVariable Long id,
+                                  @RequestBody UserDto userDto) {
+        userService.withdraw(id, userDto);
+
+        return userService.findAllUser();
     }
 }

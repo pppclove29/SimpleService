@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+
 
     @Transactional
     public Long register(UserDto userDto) {
@@ -28,7 +30,9 @@ public class UserService {
                 .build();
         new_user.setRole(Role.USER);
 
-        return userRepository.save(new_user).getId();
+        userRepository.save(new_user);
+
+        return new_user.getId();
     }
 
     @Transactional
@@ -53,17 +57,22 @@ public class UserService {
         return user.getId();
     }
 
-
     @Transactional
     public Long withdraw(Long id, UserDto userDto) {
         userRepository.deleteById(id);
-        // 연관된 게시물도 지워지나? 안지워질듯?
 
         return id;
     }
 
-    @Transactional
-    public List<User> findAllUser() {
-        return userRepository.findAll().stream().collect(Collectors.toList());
+    public List<UserDto> findAllUser() {
+        return userRepository.findAll().stream().map(User::toDto).collect(Collectors.toList());
+    }
+
+
+
+    public UserDto findUser(Long id) {
+        User user = userRepository.getReferenceById(id);
+
+        return user.toDto();
     }
 }

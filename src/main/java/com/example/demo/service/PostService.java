@@ -10,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -20,7 +23,6 @@ public class PostService {
     @Transactional
     public Long save(Long userId, PostDto postDto){
 
-
         User user = userRepository.getReferenceById(userId);
 
         Post post = Post.builder()
@@ -30,7 +32,9 @@ public class PostService {
 
         user.addPost(post);
 
-        return postRepository.save(post).getId();
+        post = postRepository.save(post);
+
+        return post.getId();
     }
     @Transactional
     public Long update(Long id, PostDto new_postDto){
@@ -50,5 +54,12 @@ public class PostService {
         postRepository.deleteById(id);
 
         return id;
+    }
+
+    public List<PostDto> findAllPost(){
+        return postRepository.findAll().stream().map(Post::toDto).collect(Collectors.toList());
+    }
+    public PostDto findPost(Long id){
+        return postRepository.findById(id).get().toDto();
     }
 }

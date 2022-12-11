@@ -1,9 +1,11 @@
 package com.example.demo.domain.user;
 
+import com.example.demo.api.dto.UserDto;
 import com.example.demo.domain.BaseEntity;
 import com.example.demo.domain.post.Post;
 import com.example.demo.domain.post.comment.Comment;
 import com.example.demo.except.WrongPasswordException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,10 +25,10 @@ public class User extends BaseEntity {
     @Column(name = "USER_ID")
     Long id;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<Post> posts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<Comment> comments = new ArrayList<>();
 
     String name;
@@ -74,5 +76,12 @@ public class User extends BaseEntity {
     public void changeConfig(String new_name, String new_password) {
         this.name = new_name;
         this.password = new_password;
+    }
+    public UserDto toDto(){
+        UserDto userdto = new UserDto();
+        userdto.setName(name);
+        userdto.setPassword(password);
+
+        return userdto;
     }
 }

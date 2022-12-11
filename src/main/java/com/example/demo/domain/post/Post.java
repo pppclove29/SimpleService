@@ -1,5 +1,6 @@
 package com.example.demo.domain.post;
 
+import com.example.demo.api.dto.PostDto;
 import com.example.demo.domain.BaseEntity;
 import com.example.demo.domain.post.comment.Comment;
 import com.example.demo.domain.user.User;
@@ -25,11 +26,12 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "USER_ID")
     User user;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     List<Comment> comments = new ArrayList<>();
 
     String title;
     String content;
+    String author;
 
     @Builder
     Post(String title, String content) {
@@ -38,6 +40,7 @@ public class Post extends BaseEntity {
     }
     public void setUser(User user){
         this.user = user;
+        author = user.getName();
     }
     public void addComment(Comment comment){
         comment.setPost(this);
@@ -46,6 +49,15 @@ public class Post extends BaseEntity {
     }
     public void deleteComment(Comment comment){
         comments.remove(comment);
+    }
+
+    public PostDto toDto(){
+        PostDto dto = new PostDto();
+        dto.setTitle(title);
+        dto.setContent(content);
+        dto.setAuthor(author);
+
+        return dto;
     }
 }
 

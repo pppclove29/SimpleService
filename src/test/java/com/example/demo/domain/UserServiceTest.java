@@ -5,12 +5,14 @@ import com.example.demo.api.dto.UserDto;
 import com.example.demo.domain.user.UserRepository;
 import com.example.demo.except.WrongPasswordException;
 import com.example.demo.service.UserService;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.annotation.Persistent;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,6 +32,9 @@ public class UserServiceTest {
         userRepository.deleteAll();
     }
 
+    @Persistent
+    EntityManager em;
+
     @Test
     public void 회원가입테스트() {
         //given
@@ -45,7 +50,6 @@ public class UserServiceTest {
         User user = userRepository.getReferenceById(id);
         User user2 = userRepository.findById(id).get();
 
-        assertThat(user.getId()).isEqualTo(1L);
         assertThat(user.getId()).isEqualTo(id);
         assertThat(user.getName()).isEqualTo(testName);
         assertThat(user.getPassword()).isEqualTo(testPassword);
